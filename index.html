@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
   <title>join group yukax</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +15,7 @@
 
   <style>
     :root {
-      /* Palette ตามภาพที่ส่งมาเป๊ะๆ */
+      /* Palette ตามภาพ */
       --bg-color: #E3F1FB;
       --card-blue-1: #A8D0EF;
       --card-blue-2: #C1E4F3;
@@ -126,11 +127,12 @@
       align-items: center;
       justify-content: space-between;
       box-shadow: var(--shadow);
+      gap: 8px;
     }
 
     .copy-banner-text {
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-dark);
     }
 
@@ -146,6 +148,7 @@
       box-shadow: 0 3px 10px rgba(153, 195, 228, 0.4);
       transition: all 0.2s ease;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .btn-action:active {
@@ -207,11 +210,14 @@
       color: var(--text-sub);
     }
 
+    /* ล็อกสีสีกรมท่าละมุน ไม่ติดสีน้ำเงินลิงก์ iOS */
     .bank-number {
       font-size: 17px;
       font-weight: 700;
-      color: var(--text-dark);
+      color: var(--text-dark) !important;
       letter-spacing: 0.5px;
+      text-decoration: none !important;
+      pointer-events: none;
     }
 
     .owner-title {
@@ -284,7 +290,7 @@
 </head>
 <body>
 
-  <!-- เพลงพื้นหลัง (เล่นทันทีเมื่อแตะหรือเลื่อนหน้าจอ) -->
+  <!-- เพลงพื้นหลัง -->
   <audio id="bgMusic" loop preload="auto" playsinline src="https://file.garden/asG8Gt-rqWIpi3II/Wistoria%20Wand%20and%20Sword%20Season%202%20Full%20Opening%20Lyrics%20Believers%20ASH%20DA%20HERO.mp3"></audio>
 
   <div class="wrapper">
@@ -309,10 +315,10 @@
 โอนแล้วแจ้งสลิปได้เลย
 แล้วรอยูส่งรหัสเข้ากลุ่มให้ค่ะ</div>
 
-    <!-- 3. กล่องข้อความให้กดคัดลอก -->
+    <!-- 3. กล่องข้อความให้กดคัดลอก (แสดง โน้ตสลีป : เข้ากลุ่มโค้ดยูกะ แต่คัดลอกได้เฉพาะ เข้ากลุ่มโค้ดยูกะ) -->
     <div class="copy-banner-card">
-      <div class="copy-banner-text" id="copyNoteTarget">เข้ากลุ่มโค้ดยูกะ</div>
-      <button type="button" class="btn-action" onclick="copyCustomText('copyNoteTarget')">คัดลอก</button>
+      <div class="copy-banner-text">โน้ตสลีป : <span id="copyNoteTarget">เข้ากลุ่มโค้ดยูกะ</span></div>
+      <button type="button" class="btn-action" onclick="copyNoteOnly()">คัดลอก</button>
     </div>
 
     <!-- 4. กล่องลิงก์ไลน์ -->
@@ -320,13 +326,13 @@
       <span id="lineTitleText">line  :  @632wdjwj</span>
     </a>
 
-    <!-- 5. กล่องชื่อบัญชี (ไม่มีอีโมจิเกิน) -->
+    <!-- 5. กล่องชื่อบัญชี -->
     <div class="bank-card-single">
       <div class="owner-title">Account Name</div>
       <div class="owner-name" id="accOwnerText">name : พนัชศกร ห.</div>
     </div>
 
-    <!-- 6. ธนาคารกสิกรไทย (ไม่มีอีโมจิเกิน) -->
+    <!-- 6. ธนาคารกสิกรไทย -->
     <div class="bank-card">
       <div class="bank-info">
         <div class="bank-title">ธนาคารกสิกรไทย</div>
@@ -335,7 +341,7 @@
       <button type="button" class="btn-action" onclick="copyPlainNumber('kbankNumText')">คัดลอก</button>
     </div>
 
-    <!-- 7. วอลเลต (ไม่มีอีโมจิเกิน) -->
+    <!-- 7. วอลเลต -->
     <div class="bank-card">
       <div class="bank-info">
         <div class="bank-title">ทรูมันนี่ วอลเล็ท</div>
@@ -357,7 +363,6 @@
   <div class="toast-msg" id="toastMsg">คัดลอกแล้วค่ะ</div>
 
   <script>
-    // ฐานข้อมูลเฉพาะของ yukax แยกขาด 100%
     const DB_COLLECTION = "yukax_site_data";
     const DB_DOC = "main_content";
 
@@ -373,7 +378,6 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // ระบบเพลง: เล่นทันทีเมื่อมีการขยับหรือแตะหน้าจอ
     const music = document.getElementById('bgMusic');
     let audioContext;
 
@@ -392,7 +396,6 @@
       }, { passive: true });
     });
 
-    // ดึงข้อมูลแบบเรียลไทม์จากระบบแอดมิน
     function applyData(d) {
       if (!d) return;
       if (d.banner) document.getElementById('bannerImg').src = d.banner;
@@ -426,7 +429,6 @@
       }
     });
 
-    // ฟังก์ชันคัดลอก
     function showToast(txt) {
       const t = document.getElementById('toastMsg');
       t.textContent = txt;
@@ -434,14 +436,15 @@
       setTimeout(() => t.classList.remove('show'), 2000);
     }
 
-    function copyCustomText(elementId) {
-      const val = document.getElementById(elementId).textContent.trim();
+    // คัดลอกเฉพาะข้อความโน้ต
+    function copyNoteOnly() {
+      const val = document.getElementById('copyNoteTarget').textContent.trim();
       navigator.clipboard.writeText(val);
       showToast("คัดลอกข้อความแล้วค่ะ");
     }
 
+    // คัดลอกเฉพาะเลขบัญชี
     function copyPlainNumber(elementId) {
-      // คัดลอกเฉพาะเลข ไม่เอาขีดหรืออักษร
       const raw = document.getElementById(elementId).textContent;
       const cleanNum = raw.replace(/[^0-9]/g, '');
       navigator.clipboard.writeText(cleanNum);
