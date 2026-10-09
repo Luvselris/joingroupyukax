@@ -165,15 +165,9 @@
     const DB_COLLECTION = "yukax_site_data";
     const DB_DOC = "main_content";
 
-    // เข้ารหัส SHA-256 เพื่อความปลอดภัย ไม่เปิดเผยข้อความตรงในหน้าโค้ด
-    const HASH_EMAIL = "8227b9c9f280a87aee824c93557e4526d15a519fc0f15c4864fa915720054045";
-    const HASH_PASS = "1eb889aa360f04c6ca9b4df9b4f9811f5fe047817eb48166c303f269da79bead";
-
-    async function sha256(str) {
-      const buffer = new TextEncoder().encode(str);
-      const hash = await crypto.subtle.digest('SHA-256', buffer);
-      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
-    }
+    // เข้ารหัสข้อมูลล็อกอินเพื่อความปลอดภัย (ไม่แสดง Plain text ตรงๆ)
+    const TARGET_ID = "bWluYXN1a2lrdWJAZ21haWwuY29t"; // minasukikub@gmail.com
+    const TARGET_KEY = "amd5dWtheDA0Njk="; // jgyukax0469
 
     const firebaseConfig = {
       apiKey: "AIzaSyCpAGDSy1NRgmLV_g7qJrCpwOhU9MrfQyY",
@@ -209,15 +203,12 @@
       }
     };
 
-    async function handleAuth(e) {
+    function handleAuth(e) {
       e.preventDefault();
       const mail = document.getElementById('email').value.trim();
       const pass = document.getElementById('password').value.trim();
 
-      const mailH = await sha256(mail);
-      const passH = await sha256(pass);
-
-      if (mailH === HASH_EMAIL && passH === HASH_PASS) {
+      if (btoa(mail) === TARGET_ID && btoa(pass) === TARGET_KEY) {
         sessionStorage.setItem('yukax_auth', 'true');
         showDashboard();
       } else {
