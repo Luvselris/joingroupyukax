@@ -210,7 +210,6 @@
       color: var(--text-sub);
     }
 
-    /* ล็อกสีสีกรมท่าละมุน ไม่ติดสีน้ำเงินลิงก์ iOS */
     .bank-number {
       font-size: 17px;
       font-weight: 700;
@@ -315,9 +314,9 @@
 โอนแล้วแจ้งสลิปได้เลย
 แล้วรอยูส่งรหัสเข้ากลุ่มให้ค่ะ</div>
 
-    <!-- 3. กล่องข้อความให้กดคัดลอก (แสดง โน้ตสลีป : เข้ากลุ่มโค้ดยูกะ แต่คัดลอกได้เฉพาะ เข้ากลุ่มโค้ดยูกะ) -->
+    <!-- 3. กล่องข้อความให้กดคัดลอก -->
     <div class="copy-banner-card">
-      <div class="copy-banner-text">โน้ตสลีป : <span id="copyNoteTarget">เข้ากลุ่มโค้ดยูกะ</span></div>
+      <div class="copy-banner-text">โน้ตสลิป : <span id="copyNoteTarget">เข้ากลุ่มโค้ดยูกะ</span></div>
       <button type="button" class="btn-action" onclick="copyNoteOnly()">คัดลอก</button>
     </div>
 
@@ -332,11 +331,11 @@
       <div class="owner-name" id="accOwnerText">name : พนัชศกร ห.</div>
     </div>
 
-    <!-- 6. ธนาคารกสิกรไทย -->
+    <!-- 6. ธนาคารกสิกรไทย (แก้เป็น 201-8-78529-6) -->
     <div class="bank-card">
       <div class="bank-info">
         <div class="bank-title">ธนาคารกสิกรไทย</div>
-        <div class="bank-number" id="kbankNumText">201-8-78539-6</div>
+        <div class="bank-number" id="kbankNumText">201-8-78529-6</div>
       </div>
       <button type="button" class="btn-action" onclick="copyPlainNumber('kbankNumText')">คัดลอก</button>
     </div>
@@ -355,8 +354,9 @@
       <img id="postImage" src="https://files.catbox.moe/l5yh01.jpeg" alt="Post">
     </div>
 
-    <!-- 9. คำกำกับใต้รูป -->
-    <div class="notice-card" id="noticeBoxText">ลูกค้าที่สนใจเข้ากลุ่มยูรบกวนอ่านป้ายก่อนนะคะเพื่อความเข้าใจกัน หากสงสัยเพิ่มเติมสามารถสอบถามก่อนได้ค่ะ</div>
+    <!-- 9. คำกำกับใต้รูป (ตัดคำว่า หาก ลงมาบรรทัดใหม่) -->
+    <div class="notice-card" id="noticeBoxText">ลูกค้าที่สนใจเข้ากลุ่มยูรบกวนอ่านป้ายก่อนนะคะเพื่อความเข้าใจกัน
+หากสงสัยเพิ่มเติมสามารถสอบถามก่อนได้ค่ะ</div>
 
   </div>
 
