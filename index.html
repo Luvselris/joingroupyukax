@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>join group yukax</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    :root {
+      /* Palette ตามภาพที่ส่งมาเป๊ะๆ */
+      --bg-color: #E3F1FB;
+      --card-blue-1: #A8D0EF;
+      --card-blue-2: #C1E4F3;
+      --cream-accent: #FFF9E6;
+      --deep-accent: #99C3E4;
+      --text-dark: #2c4257;
+      --text-sub: #54718a;
+      --white: #ffffff;
+      --shadow: 0 8px 24px rgba(153, 195, 228, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', 'Mitr', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      min-height: 100vh;
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      display: flex;
+      justify-content: center;
+      padding: 20px 14px 60px;
+      position: relative;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 410px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* 1. ส่วนหัว: แบนเนอร์ GIF + โปรไฟล์ */
+    .header-box {
+      background: var(--white);
+      border-radius: 28px;
+      padding: 12px 12px 20px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 1.5px solid var(--card-blue-2);
+    }
+
+    .banner-wrap {
+      width: 100%;
+      height: 145px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--card-blue-2);
+    }
+
+    .banner-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .profile-wrap {
+      position: relative;
+      margin-top: -48px;
+      display: inline-block;
+    }
+
+    .profile-img {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--white);
+      box-shadow: 0 6px 18px rgba(153, 195, 228, 0.4);
+      background: var(--white);
+      display: block;
+    }
+
+    .main-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-top: 10px;
+      letter-spacing: 0.4px;
+    }
+
+    /* 2. กล่องคำอธิบาย */
+    .desc-card {
+      background: var(--cream-accent);
+      border: 1.5px solid #f2e7c4;
+      border-radius: 22px;
+      padding: 16px 18px;
+      text-align: center;
+      line-height: 1.8;
+      font-size: 13.5px;
+      color: var(--text-dark);
+      white-space: pre-line;
+      box-shadow: 0 4px 14px rgba(220, 205, 160, 0.25);
+    }
+
+    /* 3. กล่องกดคัดลอกข้อความ */
+    .copy-banner-card {
+      background: var(--white);
+      border: 1.5px solid var(--card-blue-1);
+      border-radius: 20px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+    }
+
+    .copy-banner-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .btn-action {
+      background: var(--deep-accent);
+      color: var(--white);
+      border: none;
+      padding: 7px 16px;
+      border-radius: 14px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(153, 195, 228, 0.4);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .btn-action:active {
+      transform: scale(0.94);
+    }
+
+    /* 4. กล่องลิงก์ไลน์ */
+    .line-card-btn {
+      background: var(--card-blue-1);
+      border: 1.5px solid var(--deep-accent);
+      border-radius: 20px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: var(--text-dark);
+      font-size: 14px;
+      font-weight: 700;
+      box-shadow: var(--shadow);
+      transition: transform 0.2s;
+    }
+
+    .line-card-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* 5. กล่องบัญชีต่างๆ */
+    .bank-card {
+      background: var(--white);
+      border: 1.5px solid var(--card-blue-2);
+      border-radius: 20px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .bank-card-single {
+      background: var(--white);
+      border: 1.5px solid var(--card-blue-2);
+      border-radius: 20px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .bank-info {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .bank-title {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-sub);
+    }
+
+    .bank-number {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-dark);
+      letter-spacing: 0.5px;
+    }
+
+    .owner-title {
+      font-size: 12px;
+      color: var(--text-sub);
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .owner-name {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--text-dark);
+    }
+
+    /* 6. รูปภาพโพสต์เดี่ยว */
+    .post-img-card {
+      background: var(--white);
+      border: 1.5px solid var(--card-blue-2);
+      border-radius: 22px;
+      padding: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .post-img-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 16px;
+    }
+
+    /* 7. กล่องคำกำกับใต้รูป */
+    .notice-card {
+      background: var(--cream-accent);
+      border: 1.5px solid #f2e7c4;
+      border-radius: 20px;
+      padding: 16px 18px;
+      text-align: center;
+      line-height: 1.7;
+      font-size: 13px;
+      color: var(--text-dark);
+      white-space: pre-line;
+      box-shadow: 0 4px 14px rgba(220, 205, 160, 0.2);
+    }
+
+    /* Toast */
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(90px);
+      background: rgba(44, 66, 87, 0.92);
+      backdrop-filter: blur(8px);
+      color: #ffffff;
+      padding: 9px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      pointer-events: none;
+      transition: transform 0.25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+      z-index: 99999;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    }
+
+    .toast-msg.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- เพลงพื้นหลัง (เล่นทันทีเมื่อแตะหรือเลื่อนหน้าจอ) -->
+  <audio id="bgMusic" loop preload="auto" playsinline src="https://file.garden/asG8Gt-rqWIpi3II/Wistoria%20Wand%20and%20Sword%20Season%202%20Full%20Opening%20Lyrics%20Believers%20ASH%20DA%20HERO.mp3"></audio>
+
+  <div class="wrapper">
+
+    <!-- 1. ส่วนหัว -->
+    <div class="header-box">
+      <div class="banner-wrap">
+        <img id="bannerImg" class="banner-img" src="https://files.catbox.moe/dwcbgi.gif" alt="Banner">
+      </div>
+      <div class="profile-wrap">
+        <img id="profileImg" class="profile-img" src="https://files.catbox.moe/x9khby.jpeg" alt="Profile">
+      </div>
+      <h1 class="main-title" id="pageTitleText">join group yukax</h1>
+    </div>
+
+    <!-- 2. คำอธิบาย -->
+    <div class="desc-card" id="descBoxText">𝒫rice   25   baht ⠀♡
+
+โน้ตสลิป    “  เข้ากลุ่มโค้ดยูกะ  ”
+ลืมโน้ต โอนเพิ่ม1฿ พร้อมโน้ต
+
+โอนแล้วแจ้งสลิปได้เลย
+แล้วรอยูส่งรหัสเข้ากลุ่มให้ค่ะ</div>
+
+    <!-- 3. กล่องข้อความให้กดคัดลอก -->
+    <div class="copy-banner-card">
+      <div class="copy-banner-text" id="copyNoteTarget">เข้ากลุ่มโค้ดยูกะ</div>
+      <button type="button" class="btn-action" onclick="copyCustomText('copyNoteTarget')">คัดลอก</button>
+    </div>
+
+    <!-- 4. กล่องลิงก์ไลน์ -->
+    <a id="lineLinkBox" href="https://lin.ee/xxbDtqv" target="_blank" class="line-card-btn">
+      <span id="lineTitleText">line  :  @632wdjwj</span>
+    </a>
+
+    <!-- 5. กล่องชื่อบัญชี (ไม่มีอีโมจิเกิน) -->
+    <div class="bank-card-single">
+      <div class="owner-title">Account Name</div>
+      <div class="owner-name" id="accOwnerText">name : พนัชศกร ห.</div>
+    </div>
+
+    <!-- 6. ธนาคารกสิกรไทย (ไม่มีอีโมจิเกิน) -->
+    <div class="bank-card">
+      <div class="bank-info">
+        <div class="bank-title">ธนาคารกสิกรไทย</div>
+        <div class="bank-number" id="kbankNumText">201-8-78539-6</div>
+      </div>
+      <button type="button" class="btn-action" onclick="copyPlainNumber('kbankNumText')">คัดลอก</button>
+    </div>
+
+    <!-- 7. วอลเลต (ไม่มีอีโมจิเกิน) -->
+    <div class="bank-card">
+      <div class="bank-info">
+        <div class="bank-title">ทรูมันนี่ วอลเล็ท</div>
+        <div class="bank-number" id="walletNumText">063-992-2026</div>
+      </div>
+      <button type="button" class="btn-action" onclick="copyPlainNumber('walletNumText')">คัดลอก</button>
+    </div>
+
+    <!-- 8. รูปภาพโพสต์เดี่ยวขนาดเต็ม คมชัด 100% -->
+    <div class="post-img-card">
+      <img id="postImage" src="https://files.catbox.moe/l5yh01.jpeg" alt="Post">
+    </div>
+
+    <!-- 9. คำกำกับใต้รูป -->
+    <div class="notice-card" id="noticeBoxText">ลูกค้าที่สนใจเข้ากลุ่มยูรบกวนอ่านป้ายก่อนนะคะเพื่อความเข้าใจกัน หากสงสัยเพิ่มเติมสามารถสอบถามก่อนได้ค่ะ</div>
+
+  </div>
+
+  <div class="toast-msg" id="toastMsg">คัดลอกแล้วค่ะ</div>
+
+  <script>
+    // ฐานข้อมูลเฉพาะของ yukax แยกขาด 100%
+    const DB_COLLECTION = "yukax_site_data";
+    const DB_DOC = "main_content";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCpAGDSy1NRgmLV_g7qJrCpwOhU9MrfQyY",
+      authDomain: "benefitie.firebaseapp.com",
+      projectId: "benefitie",
+      storageBucket: "benefitie.firebasestorage.app",
+      messagingSenderId: "270365672215",
+      appId: "1:270365672215:web:230d1491091e26ce83ed52"
+    };
+
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // ระบบเพลง: เล่นทันทีเมื่อมีการขยับหรือแตะหน้าจอ
+    const music = document.getElementById('bgMusic');
+    let audioContext;
+
+    function playMusic() {
+      if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioContext.state === 'suspended') audioContext.resume();
+      if (music.paused) music.play().catch(() => {});
+    }
+
+    window.addEventListener('load', playMusic);
+    document.addEventListener('DOMContentLoaded', playMusic);
+    ['touchstart', 'touchend', 'click', 'scroll', 'pointerdown', 'mousemove'].forEach(evt => {
+      document.addEventListener(evt, function trig() {
+        playMusic();
+        document.removeEventListener(evt, trig);
+      }, { passive: true });
+    });
+
+    // ดึงข้อมูลแบบเรียลไทม์จากระบบแอดมิน
+    function applyData(d) {
+      if (!d) return;
+      if (d.banner) document.getElementById('bannerImg').src = d.banner;
+      if (d.profile) document.getElementById('profileImg').src = d.profile;
+      if (d.pageTitle) document.getElementById('pageTitleText').textContent = d.pageTitle;
+      if (d.desc) document.getElementById('descBoxText').textContent = d.desc;
+      if (d.copyNote) document.getElementById('copyNoteTarget').textContent = d.copyNote;
+      if (d.lineTitle) document.getElementById('lineTitleText').textContent = d.lineTitle;
+      if (d.lineUrl) document.getElementById('lineLinkBox').href = d.lineUrl;
+      if (d.accOwner) document.getElementById('accOwnerText').textContent = d.accOwner;
+      if (d.kbankNum) document.getElementById('kbankNumText').textContent = d.kbankNum;
+      if (d.walletNum) document.getElementById('walletNumText').textContent = d.walletNum;
+      if (d.postImg) document.getElementById('postImage').src = d.postImg;
+      if (d.notice) document.getElementById('noticeBoxText').textContent = d.notice;
+      if (d.musicUrl && music.src !== d.musicUrl) {
+        music.src = d.musicUrl;
+        playMusic();
+      }
+    }
+
+    try {
+      const cached = localStorage.getItem('yukax_cache');
+      if (cached) applyData(JSON.parse(cached));
+    } catch(e) {}
+
+    db.collection(DB_COLLECTION).doc(DB_DOC).onSnapshot(doc => {
+      if (doc.exists) {
+        const d = doc.data();
+        localStorage.setItem('yukax_cache', JSON.stringify(d));
+        applyData(d);
+      }
+    });
+
+    // ฟังก์ชันคัดลอก
+    function showToast(txt) {
+      const t = document.getElementById('toastMsg');
+      t.textContent = txt;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    function copyCustomText(elementId) {
+      const val = document.getElementById(elementId).textContent.trim();
+      navigator.clipboard.writeText(val);
+      showToast("คัดลอกข้อความแล้วค่ะ");
+    }
+
+    function copyPlainNumber(elementId) {
+      // คัดลอกเฉพาะเลข ไม่เอาขีดหรืออักษร
+      const raw = document.getElementById(elementId).textContent;
+      const cleanNum = raw.replace(/[^0-9]/g, '');
+      navigator.clipboard.writeText(cleanNum);
+      showToast("คัดลอกเลขบัญชีแล้วค่ะ");
+    }
+  </script>
+</body>
+</html>
